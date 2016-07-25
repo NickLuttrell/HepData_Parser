@@ -49,7 +49,7 @@ def parseDataList(dataList, cmdlist, cmd_index, fignum, output):
         else:
             continue
     
-    header.writeColumnHeaders(dataList[dex], output) # Write
+    header.writeColumnHeaders(dataList[dex], output) # Write the column headers
 
     numcol = len(dataList[dex + 1]) # Actual data values follow immediately after x and yheaders (the place of 'dex')
     print ("There are {0} columns\n".format(numcol))
@@ -108,7 +108,10 @@ for line in datafile:
             cmd_index += 1
             dataList = []
 
-        fignum = delimiter + " " + nextline[1]
+        try:
+            fignum = delimiter + " " + nextline[1]
+        except IndexError:
+            fignum = delimiter
         print (cmd_index)
 
 else:

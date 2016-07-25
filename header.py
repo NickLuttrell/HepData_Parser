@@ -112,30 +112,59 @@ def writeData(current_line, numcol, data_format, output):
             if 'da' in item:
                 col_index = re.search(r"\d+(\.\d+)?", item)
                 col_index = col_index.group(0)
-                print (current_line[int(col_index)].strip(','))
-                order += "%r" % float(current_line[int(col_index)].strip(','))
+                try:
+                    order += "%r" % float(current_line[int(col_index)].strip(','))
+                except ValueError:
+                    order += "%r" % current_line[int(col_index)].strip(',')
+                except IndexError:
+                    order += "-"
             elif 'na' in item:
                 order += " +- 0"
             elif '+' in item:
                 col_index = re.search(r"\d+(\.\d+)?", item)
                 col_index = col_index.group(0)
-                order += " +%r" % float(current_line[int(col_index)].strip(','))
+                try:
+                    order += " +%r" % float(current_line[int(col_index)].strip(','))
+                except ValueError:
+                    order += " +%r" % current_line[int(col_index)].strip(',')
+                except IndexError:
+                    order += " +0"
             elif '-' in item:
                 col_index = re.search(r"\d+(\.\d+)?", item)
                 col_index = col_index.group(0)
-                order += " -%r" % float(current_line[int(col_index)].strip(','))
+                try:
+                    order += " -%r" % float(current_line[int(col_index)].strip(','))
+                except ValueError:
+                    order += " -%r" % current_line[int(col_index)].strip(',')
+                except IndexError:
+                    order += " -0"
             elif 'st' in item:
                 col_index = re.search(r"\d+(\.\d+)?", item)
                 col_index = col_index.group(0)
-                order += " +- %r" % float(current_line[int(col_index)].strip(','))
+                try:
+                    order += " +- %r" % float(current_line[int(col_index)].strip(','))
+                except ValueError:
+                    order += " +- %r" % current_line[int(col_index)].strip(',')
+                except IndexError:
+                    order += " +- 0"
             elif 'sy' in item:
                 col_index = re.split('[a-z]+', item)
                 col_index1 = col_index[1]
                 try:
                     col_index2 = col_index[2]
-                    order += " (DSYS=+%r, -%r)" % ( float(current_line[int(col_index1)].strip(',')), float(current_line[int(col_index2)].strip(',')) )
+                    try:
+                        order += " (DSYS=+%r, -%r)" % ( float(current_line[int(col_index1)].strip(',')), float(current_line[int(col_index2)].strip(',')) )
+                    except ValueError:
+                        order += " (DSYS=+%r, -%r)" % ( current_line[int(col_index1)].strip(','), current_line[int(col_index2)].strip(',') )
+                    except IndexError:
+                        continue
                 except IndexError:
-                    order += " (DSYS=+%r, -%r)" % ( float(current_line[int(item[2])].strip(',')), float(current_line[int(item[3])].strip(',')) )
+                    try:
+                        order += " (DSYS=+%r, -%r)" % ( float(current_line[int(item[2])].strip(',')), float(current_line[int(item[3])].strip(',')) )
+                    except ValueError:
+                        order += " (DSYS=+%r, -%r)" % ( current_line[int(item[2])].strip(','), current_line[int(item[3])].strip(',') )
+                    except IndexError:
+                        continue
         
             elif ';' in item:
                 order += "; "
