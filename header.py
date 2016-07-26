@@ -180,6 +180,7 @@ def writeData(current_line, numcol, data_format, output):
             output.close()
             sys.exit()
 
+    order = order.replace('\'', "")     # Eliminate single quotes around non-numerical entries.
     output.write( order + "\n" )
 
 # End of header
